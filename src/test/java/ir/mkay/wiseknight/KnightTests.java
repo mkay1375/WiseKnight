@@ -9,28 +9,28 @@ class KnightTests {
 
     @Test
     public void testPossibleMoves_whenKnightIsAlmostInTheMiddle() {
-        var knight = new Knight(new ChessBoard(), ChessSquare.of("d5"));
+        var knight = new Knight(new ChessBoard(), new ChessSquare("d5"));
         ChessPieceUtils.printPossibleMoves(knight);
         var possibleMoves = knight.getPossibleDestinations();
         assertEquals(8, possibleMoves.size());
-        assertTrue(possibleMoves.contains(ChessSquare.of("c7")));
-        assertTrue(possibleMoves.contains(ChessSquare.of("e7")));
-        assertTrue(possibleMoves.contains(ChessSquare.of("f6")));
-        assertTrue(possibleMoves.contains(ChessSquare.of("f4")));
-        assertTrue(possibleMoves.contains(ChessSquare.of("e3")));
-        assertTrue(possibleMoves.contains(ChessSquare.of("c3")));
-        assertTrue(possibleMoves.contains(ChessSquare.of("b4")));
-        assertTrue(possibleMoves.contains(ChessSquare.of("b6")));
+        assertTrue(possibleMoves.contains(new ChessSquare("c7")));
+        assertTrue(possibleMoves.contains(new ChessSquare("e7")));
+        assertTrue(possibleMoves.contains(new ChessSquare("f6")));
+        assertTrue(possibleMoves.contains(new ChessSquare("f4")));
+        assertTrue(possibleMoves.contains(new ChessSquare("e3")));
+        assertTrue(possibleMoves.contains(new ChessSquare("c3")));
+        assertTrue(possibleMoves.contains(new ChessSquare("b4")));
+        assertTrue(possibleMoves.contains(new ChessSquare("b6")));
     }
 
     @Test
     public void testPossibleMoves_whenKnightIsInTopLeftCorner() {
-        var knight = new Knight(new ChessBoard(), ChessSquare.of("a8"));
+        var knight = new Knight(new ChessBoard(), new ChessSquare("a8"));
         ChessPieceUtils.printPossibleMoves(knight);
         var possibleMoves = knight.getPossibleDestinations();
         assertEquals(2, possibleMoves.size());
-        assertTrue(possibleMoves.contains(ChessSquare.of("c7")));
-        assertTrue(possibleMoves.contains(ChessSquare.of("b6")));
+        assertTrue(possibleMoves.contains(new ChessSquare("c7")));
+        assertTrue(possibleMoves.contains(new ChessSquare("b6")));
     }
 
 

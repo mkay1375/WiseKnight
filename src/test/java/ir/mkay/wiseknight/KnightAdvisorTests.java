@@ -2,7 +2,7 @@ package ir.mkay.wiseknight;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class KnightAdvisorTests {
 
@@ -78,7 +78,7 @@ class KnightAdvisorTests {
 
     private ChessPieceMove getMinimumMoves(String start, String end) {
         return new KnightAdvisor()
-                .getMinimumMoves(new Knight(new ChessBoard(), ChessSquare.of(start)), ChessSquare.of(end));
+                .getMinimumMoves(new Knight(new ChessBoard(), new ChessSquare(start)), new ChessSquare(end));
     }
 
 }

@@ -1,7 +1,10 @@
 package ir.mkay.wiseknight;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 
+@Service
 public class KnightAdvisor {
 
     public ChessPieceMove getMinimumMoves(Knight knight, ChessSquare destination) {

@@ -1,10 +1,10 @@
 package ir.mkay.wiseknight;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
@@ -16,9 +16,9 @@ public class ChessSquare {
     @JsonIgnore
     private boolean visited = false; // Can be refactored to an attribute map.
 
-    public static ChessSquare of(String stringRepresentation) {
+    public ChessSquare(String algebraicNotation) {
         // Todo: add validation
-        return new ChessSquare('8' - stringRepresentation.charAt(1), stringRepresentation.charAt(0) - 'a');
+        this('8' - algebraicNotation.charAt(1), algebraicNotation.charAt(0) - 'a');
     }
 
     public ChessSquare(int row, int column) {
@@ -34,11 +34,13 @@ public class ChessSquare {
         return (char) ('a' + column);
     }
 
+    @JsonIgnore
     public boolean isValid() {
         return (0 <= row && row < 8) && (0 <= column && column < 8);
     }
 
     @Override
+    @JsonProperty("an")
     public String toString() {
         return "" + getFile() + getWhitesRank();
     }
