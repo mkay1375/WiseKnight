@@ -3,7 +3,7 @@ package ir.mkay.wiseknight;
 public class ChessPieceUtils {
 
     public static void printPossibleMoves(ChessPiece piece) {
-        var possibleMoves = piece.getPossibleMoves();
+        var possibleMoves = piece.getPossibleDestinations();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 var square = new ChessSquare(i, j);

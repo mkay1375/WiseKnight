@@ -25,7 +25,7 @@ public class Knight implements ChessPiece {
     }
 
     @Override
-    public List<ChessSquare> getPossibleMoves() {
+    public List<ChessSquare> getPossibleDestinations() {
         return getAllMoves().stream()
                 .filter(ChessSquare::isValid)
                 .map(board::getSquare)

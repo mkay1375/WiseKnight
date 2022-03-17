@@ -9,7 +9,7 @@ public class KnightAdvisor {
             return new ChessPieceMove(destination);
         }
 
-        var possibleMoves = knight.getPossibleMoves().stream()
+        var possibleMoves = knight.getPossibleDestinations().stream()
                 .map(s -> new ChessPieceMove(s, new ChessPieceMove(knight.getCurrentPosition())))
                 .toList();
 
@@ -27,7 +27,7 @@ public class KnightAdvisor {
                 if (!move.getDestination().isVisited()) {
                     knight.move(move.getDestination());
                     move.getDestination().setVisited(true);
-                    for (var square : knight.getPossibleMoves()) {
+                    for (var square : knight.getPossibleDestinations()) {
                         nextPossibleMoves.add(new ChessPieceMove(square, move));
                     }
                 }

@@ -11,7 +11,7 @@ class KnightTests {
     public void testPossibleMoves_whenKnightIsAlmostInTheMiddle() {
         var knight = new Knight(new ChessBoard(), ChessSquare.of("d5"));
         ChessPieceUtils.printPossibleMoves(knight);
-        var possibleMoves = knight.getPossibleMoves();
+        var possibleMoves = knight.getPossibleDestinations();
         assertEquals(8, possibleMoves.size());
         assertTrue(possibleMoves.contains(ChessSquare.of("c7")));
         assertTrue(possibleMoves.contains(ChessSquare.of("e7")));
@@ -27,7 +27,7 @@ class KnightTests {
     public void testPossibleMoves_whenKnightIsInTopLeftCorner() {
         var knight = new Knight(new ChessBoard(), ChessSquare.of("a8"));
         ChessPieceUtils.printPossibleMoves(knight);
-        var possibleMoves = knight.getPossibleMoves();
+        var possibleMoves = knight.getPossibleDestinations();
         assertEquals(2, possibleMoves.size());
         assertTrue(possibleMoves.contains(ChessSquare.of("c7")));
         assertTrue(possibleMoves.contains(ChessSquare.of("b6")));
