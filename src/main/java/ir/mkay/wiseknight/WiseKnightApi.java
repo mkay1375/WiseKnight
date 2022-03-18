@@ -10,11 +10,11 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/wise-night")
-public class WiseKnightController {
+public class WiseKnightApi {
 
     private final KnightAdvisor knightAdvisor;
 
-    public WiseKnightController(@Autowired KnightAdvisor knightAdvisor) {
+    public WiseKnightApi(@Autowired KnightAdvisor knightAdvisor) {
         this.knightAdvisor = knightAdvisor;
     }
 
