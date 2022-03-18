@@ -26,6 +26,6 @@ docker build -t mkay1375/wise-knight:latest .
 ```bash
 docker run -p 8080:8080 mkay1375/wise-knight
 ```
-6. Head to [http://localhost:8080](http://localhost:8080)
+6. Head to [http://localhost:8080](http://localhost:8080) or [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html).
 
 \* Maven may not work with VPN; if you stuck on maven, disable VPN and run the command again.
