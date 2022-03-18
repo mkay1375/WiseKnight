@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/wise-night")
@@ -20,14 +19,14 @@ public class WiseKnightController {
     }
 
     @PostMapping("/moves")
-    public List<ChessSquare> getMinimumMoves(@RequestBody ChessPieceMoveDto moveDto) {
+    public WiseKnightMinimumMovesDto getMinimumMoves(@RequestBody ChessPieceMoveDto moveDto) {
         var lastMove = knightAdvisor.getMinimumMoves(
                 new Knight(new ChessBoard(), new ChessSquare(moveDto.getFrom())), new ChessSquare(moveDto.getTo()));
         var moves = new ArrayList<ChessSquare>();
         for (var m = lastMove; m != null; m = m.getPreviousMove()) {
             moves.add(0, m.getDestination());
         }
-        return moves;
+        return new WiseKnightMinimumMovesDto(moves.size() - 1, moves);
     }
 
 }

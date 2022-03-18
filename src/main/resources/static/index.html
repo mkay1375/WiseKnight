@@ -209,9 +209,9 @@
             dataType: "json",
             success: function (data) {
                 const resultTextEl = $('#result-text');
-                resultTextEl.text('Minimum Moves: ' + (data.length - 1));
-                for (let i = 0; i < data.length; i++) {
-                    const sq = data[i];
+                resultTextEl.text('Minimum Moves: ' + (data.movesCount));
+                for (let i = 0; i < data.steps.length; i++) {
+                    const sq = data.steps[i];
                     $(`.square-${sq.row}-${sq.column}`).html($(`<div class="text">${i + 1}</div>`));
                 }
             },
