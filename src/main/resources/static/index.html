@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wise Knight</title>
+    <script src="jquery-3.6.0.min.js"></script>
+    <style>
+        html, body, .container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin: 5px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: center;
+            color: #7a4a1a;
+        }
+
+        #reset-button {
+            color: #7a4a1a;
+            background-color: #ffce9e;
+            border: 0;
+            border-radius: 5px;
+            padding: 5px;
+            cursor: pointer;
+            transition: opacity .2s;
+            margin: 5px;
+        }
+
+        #reset-button:hover {
+            opacity: .7;
+        }
+
+        .board-container {
+            flex: 1;
+        }
+
+        .board {
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+        }
+
+        .square {
+            background-color: #ffce9e;
+            border-radius: 5px;
+            box-sizing: border-box;
+            border: 2px white solid;
+            cursor: pointer;
+            transition: all .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .square:hover {
+            opacity: .7;
+        }
+
+        .square-black {
+            background-color: #d18b47;
+        }
+
+        .square-selected {
+            background-color: #7a4a1a;
+        }
+
+        .square .text {
+            color: #7a4a1a;
+            font-size: 20px ;
+        }
+
+        .square-selected .text {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header-container">
+        <h1 id="start-text">Choose starting square:</h1>
+        <h1 id="end-text" style="display: none;">Choose ending square:</h1>
+        <h1 id="result-text" style="display: none;"></h1>
+        <button id="reset-button" style="display: none;" onclick="window.location.reload()">Reset</button>
+    </div>
+    <div class="board-container">
+        <div class="board"></div>
+    </div>
+</div>
+<script>
+    const STATES = {START_SELECTION: 1, END_SELECTION: 2, SHOW_RESULT: 3};
+    const boardContainerEl = $('.board-container');
+    const boardEl = $('.board');
+
+    let state = STATES.START_SELECTION;
+    let startSquare;
+    let endSquare;
+
+    function calculateBoardSize() {
+        const boardSize = Math.min(boardContainerEl.width(), boardContainerEl.height()) - 5;
+        boardEl.width(boardSize + 'px');
+        boardEl.height(boardSize + 'px');
+    }
+
+    function createChessSquares() {
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                boardEl.append(createChessSquare(i, j));
+            }
+        }
+    }
+
+    function createChessSquare(row, column) {
+        let isBlack = false;
+        if (row % 2 === 0 && column % 2 === 1) isBlack = true;
+        else if (row % 2 === 1 && column % 2 === 0) isBlack = true;
+
+        return $('<div>')
+            .addClass('square')
+            .addClass(`square-${row}-${column}`)
+            .addClass(isBlack ? 'square-black' : '')
+            .data('row', row)
+            .data('column', column)
+            .html($('<div class="text" style="opacity: 0">1</div>'))
+            .on('click', squareOnClick);
+    }
+
+    function squareOnClick() {
+        const el = $(this);
+        if (state === STATES.START_SELECTION) {
+            startSquare = {
+                row: el.data('row'),
+                column: el.data('column')
+            }
+            state = STATES.END_SELECTION;
+            reflectStateChangeInUI();
+            el.addClass('square-selected');
+        } else if (state === STATES.END_SELECTION) {
+            endSquare = {
+                row: el.data('row'),
+                column: el.data('column')
+            }
+            state = STATES.SHOW_RESULT;
+            reflectStateChangeInUI();
+            el.addClass('square-selected');
+            showMinimumMoves();
+        }
+    }
+
+    function reflectStateChangeInUI() {
+        const startTextEl = $('#start-text');
+        const endTextEl = $('#end-text');
+        const resultTextEl = $('#result-text');
+        const resetButtonEl = $('#reset-button');
+
+        switch (state) {
+            case STATES.START_SELECTION:
+                startTextEl.show();
+                endTextEl.hide();
+                resultTextEl.hide();
+                resetButtonEl.hide();
+                break;
+            case STATES.END_SELECTION:
+                startTextEl.hide();
+                endTextEl.show();
+                resultTextEl.hide();
+                resetButtonEl.hide();
+                break;
+            case STATES.SHOW_RESULT:
+                startTextEl.hide();
+                endTextEl.hide();
+                resultTextEl.text('Please wait!');
+                resultTextEl.show();
+                resetButtonEl.show();
+                break;
+        }
+    }
+
+    function showMinimumMoves() {
+        $.ajax({
+            type: "POST",
+            url: "/api/wise-night/moves",
+            data: JSON.stringify({
+                from: convertSquareToAN(startSquare.row, startSquare.column),
+                to: convertSquareToAN(endSquare.row, endSquare.column)
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                const resultTextEl = $('#result-text');
+                resultTextEl.text('Minimum Moves: ' + (data.length - 1));
+                for (let i = 0; i < data.length; i++) {
+                    const sq = data[i];
+                    $(`.square-${sq.row}-${sq.column}`).html($(`<div class="text">${i + 1}</div>`));
+                }
+            },
+            error: function (errMsg) {
+                alert("Unknown error!");
+            }
+        });
+    }
+
+    function convertSquareToAN(row, column) {
+        return (String.fromCharCode(97 + column)) + (8 - row);
+    }
+
+    function run() {
+        calculateBoardSize();
+        if (ResizeObserver) {
+            new ResizeObserver(calculateBoardSize).observe(boardContainerEl[0]);
+        } else {
+            window.onresize = calculateBoardSize;
+        }
+
+        createChessSquares();
+    }
+
+    run();
+</script>
+</body>
+</html>
